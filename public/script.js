@@ -3,7 +3,8 @@ let state = {
   from: null,
   model: '',
   models: [],
-  mode: ''
+  mode: '',
+  response: 'false'
 }
 
 const socket = new WebSocket(`ws://${state.server}:2125`)
@@ -21,8 +22,19 @@ socket.addEventListener('message', message => {
     state.from = msg.from
   }
 
+  if (msg.type === 'compute-start') {
+    state.computing = msg.payload === state.model
+  } else if (msg.type === 'compute-end') {
+    if (msg.payload.model === state.model) {
+      state.computing = false
+      speak(msg.payload.response)
+      console.log(msg.payload.response)
+    }
+  }
+
   state.models = msg.state.models
   state.mode = msg.state.mode
+
   updateUi()
 })
 
@@ -39,11 +51,17 @@ document.querySelector('#send').addEventListener('click', () => {
 function updateUi () {
   document.querySelector('#clients').textContent = state.models.length
   document.querySelector('#from').textContent = state.from
+  document.querySelector('#model').value = state.model
+  if (state.computing) {
+    document.querySelector('header').style.backgroundColor = 'green'
+  } else {
+    document.querySelector('header').style.backgroundColor = 'red'
+  }
 }
 
 function loadState () {
   if (!localStorage.getItem('state')) return
-  state = JSON.parse(localStorage.getItem('state'))
+  else state = JSON.parse(localStorage.getItem('state'))
 }
 
 function saveState () {
@@ -54,8 +72,16 @@ function send (msg) {
   socket.send(JSON.stringify(msg))
 }
 
+function speak (text) {
+  const utterance = new SpeechSynthesisUtterance(text)
+  const voices = speechSynthesis.getVoices()
+  utterance.voice = voices[0]
+  speechSynthesis.speak(utterance)
+}
+
 function init () {
   loadState()
+  updateUi()
 }
 
 init()
