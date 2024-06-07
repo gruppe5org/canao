@@ -55,3 +55,10 @@ input {
   font-size: 1em;
   text-transform: uppercase;
 }
+
+#response-container {
+  color: transparent;
+}
+.highlight {
+  color: black;
+}

@@ -27,7 +27,7 @@ socket.addEventListener('message', message => {
   } else if (msg.type === 'compute-end') {
     if (msg.payload.model === state.model) {
       state.computing = false
-      speak(msg.payload.response)
+      startSpeech(msg.payload.response)
       console.log(msg.payload.response)
     }
   }
@@ -77,6 +77,37 @@ function speak (text) {
   const voices = speechSynthesis.getVoices()
   utterance.voice = voices[0]
   speechSynthesis.speak(utterance)
+}
+
+
+
+function startSpeech (text) {
+  let textContainer = document.querySelector('#response-container')
+  textContainer.innerHTML = ''
+
+  const words = text.split(/\s+/);
+
+  words.forEach((word, index) => {
+    const span = document.createElement('span')
+    span.textContent = word + ' '
+    span.id = 'word-' + index
+    textContainer.appendChild(span)
+  })
+
+  const utterance = new SpeechSynthesisUtterance(text)
+  let currentWordIndex = 0
+
+  utterance.onboundary = event => {
+    console.log(event)
+    if (event.name === 'word') {
+      document
+        .getElementById('word-' + currentWordIndex)
+        .classList.add('highlight')
+      currentWordIndex++
+    }
+  }
+
+  window.speechSynthesis.speak(utterance)
 }
 
 function init () {
