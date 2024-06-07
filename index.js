@@ -15,7 +15,8 @@ const wss = new WebSocket.Server({ port: 2125 })
 
 const state = {
   models: [],
-  history: []
+  history: [],
+  loop: true
 }
 
 function log () {
@@ -41,39 +42,51 @@ async function generate (model, prompt) {
     } else {
       return json
     }
-    console.log('wtf', json)
-    return json
   } catch (error) {
     console.log('error while fetching', model.model)
   }
 }
 
-async function compute (initialPrompt) {
-  for (const model of state.models) {
-    sync({
-      type: 'compute-start',
-      payload: model.model
-    })
-    console.log('computing', model.model)
-    const prompt =
-      state.history.length === 0
-        ? initialPrompt
-        : state.history[state.history.length - 1].response.response
-    const response = await generate(model, prompt)
-    if (response) {
-      state.history.push({
-        model,
-        prompt,
-        response,
-        timestamp: Date.now()
-      })
+async function handleCompute(promptOrModel) {
+  console.log(promptOrModel)
+  const model = state.models.find((m) => m.model === promptOrModel)
+  console.log(model)
+  if (model) {
+    if (model === state.models[state.models.length - 1]) {
+      if (state.loop) {
+        await compute(state.models[0], state.history[state.history.length - 1].response.response)
+      } else {
+        return log()
+      }
+    } else {
+      const index = state.models.indexOf(model)
+      await compute(state.models[index + 1], state.history[state.history.length - 1].response.response)
     }
-    sync({
-      type: 'compute-end',
-      payload: response
+  } else {
+    await compute(state.models[0], promptOrModel)
+  }
+}
+
+async function compute (model, prompt) {
+  sync({
+    type: 'compute-start',
+    payload: model.model
+  })
+  console.log('computing', model.model)
+  const response = await generate(model, prompt)
+  console.log('repsonse', response)
+  if (response) {
+    state.history.push({
+      model,
+      prompt,
+      response,
+      timestamp: Date.now()
     })
   }
-  log()
+  sync({
+    type: 'compute-end',
+    payload: response
+  })
 }
 
 function broadcast (data, ws) {
@@ -131,7 +144,15 @@ wss.on('connection', (ws, req) => {
     }
 
     if (msg.type === 'compute') {
-      compute(msg.payload)
+      handleCompute(msg.payload)
+    }
+
+    if (msg.type === 'abort') {
+      state.loop = false
+    }
+    
+    if (msg.type === 'speech-end') {
+      handleCompute(msg.payload)
     }
 
     if (msg.type === 'init') {

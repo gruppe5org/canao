@@ -57,7 +57,7 @@ input {
 }
 
 #response-container {
-  color: transparent;
+  /* color: transparent; */
 }
 .highlight {
   color: black;

@@ -1,10 +1,10 @@
 let state = {
-  server: '172.17.13.105',
+  server: '172.17.15.68',
   from: null,
   model: '',
   models: [],
   mode: '',
-  response: 'false'
+  computing: false
 }
 
 const socket = new WebSocket(`ws://${state.server}:2125`)
@@ -24,13 +24,12 @@ socket.addEventListener('message', message => {
 
   if (msg.type === 'compute-start') {
     state.computing = msg.payload === state.model
-  } else if (msg.type === 'compute-end') {
-    if (msg.payload.model === state.model) {
-      state.computing = false
+    console.log(state.model, state.computing)
+  } else if (msg.type == 'compute-end') {
+    if (msg.payload && msg.payload.model === state.model) {
       startSpeech(msg.payload.response)
-      console.log(msg.payload.response)
     }
-  }
+  } 
 
   state.models = msg.state.models
   state.mode = msg.state.mode
@@ -53,9 +52,9 @@ function updateUi () {
   document.querySelector('#from').textContent = state.from
   document.querySelector('#model').value = state.model
   if (state.computing) {
-    document.querySelector('header').style.backgroundColor = 'green'
+    document.querySelector('header').style.background = 'green'
   } else {
-    document.querySelector('header').style.backgroundColor = 'red'
+    document.querySelector('header').style.background = 'red'
   }
 }
 
@@ -72,40 +71,37 @@ function send (msg) {
   socket.send(JSON.stringify(msg))
 }
 
-function speak (text) {
-  const utterance = new SpeechSynthesisUtterance(text)
-  const voices = speechSynthesis.getVoices()
-  utterance.voice = voices[0]
-  speechSynthesis.speak(utterance)
-}
-
-
-
 function startSpeech (text) {
-  let textContainer = document.querySelector('#response-container')
+  const textContainer = document.querySelector('#response-container')
   textContainer.innerHTML = ''
 
-  const words = text.split(/\s+/);
+  const words = text.split('')
+  const utterance = new SpeechSynthesisUtterance(text)
 
-  words.forEach((word, index) => {
+  let prevChar = 0
+  utterance.addEventListener('boundary', (event) => {
+    const char = event.charIndex + event.charLength
+    const word = words.slice(prevChar, char).join('')
+    prevChar = char
+
     const span = document.createElement('span')
-    span.textContent = word + ' '
-    span.id = 'word-' + index
+    span.textContent = word
+    span.id = `word-${event.charIndex}`
     textContainer.appendChild(span)
   })
 
-  const utterance = new SpeechSynthesisUtterance(text)
-  let currentWordIndex = 0
+  utterance.addEventListener('end', (event) => {
+    state.computing = false
+    updateUi()
 
-  utterance.onboundary = event => {
-    console.log(event)
-    if (event.name === 'word') {
-      document
-        .getElementById('word-' + currentWordIndex)
-        .classList.add('highlight')
-      currentWordIndex++
-    }
-  }
+    send({
+      type: 'speech-end',
+      payload: state.model
+    })
+  })
+
+  const voices = speechSynthesis.getVoices()
+  utterance.voice = voices[0]
 
   window.speechSynthesis.speak(utterance)
 }
