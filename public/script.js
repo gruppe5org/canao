@@ -102,6 +102,7 @@ function startSpeech (text) {
 
   const voices = speechSynthesis.getVoices()
   utterance.voice = voices[0]
+  utterance.rate = 3
 
   window.speechSynthesis.speak(utterance)
 }
