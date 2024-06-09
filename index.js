@@ -16,7 +16,7 @@ const wss = new WebSocket.Server({ port: 2125 })
 const state = {
   models: [],
   history: [],
-  loop: true
+  loop: false
 }
 
 function log () {
@@ -63,6 +63,7 @@ async function handleCompute(promptOrModel) {
       await compute(state.models[index + 1], state.history[state.history.length - 1].response.response)
     }
   } else {
+    if (!state.models[0]) return console.log('no model to compute')
     await compute(state.models[0], promptOrModel)
   }
 }
@@ -131,7 +132,7 @@ function handleModel (msg) {
 
 wss.on('connection', (ws, req) => {
   const ip = req.socket.remoteAddress.replace('::ffff:', '')
-  console.log('new', ip)
+  console.log('connection', ip)
 
   ws.on('message', async data => {
     const msg = JSON.parse(data)
@@ -148,7 +149,12 @@ wss.on('connection', (ws, req) => {
     }
 
     if (msg.type === 'abort') {
-      state.loop = false
+      /* stop all computation */
+    }
+
+    if (msg.type === 'loop') {
+      state.loop = !state.loop
+      console.log('loop', state.loop)
     }
     
     if (msg.type === 'speech-end') {

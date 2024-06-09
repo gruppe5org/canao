@@ -1,5 +1,5 @@
 let state = {
-  server: '172.17.15.68',
+  server: 'localhost' /* '172.17.15.68' */,
   from: null,
   model: '',
   models: [],
@@ -26,6 +26,7 @@ socket.addEventListener('message', message => {
     state.computing = msg.payload === state.model
     console.log(state.model, state.computing)
   } else if (msg.type == 'compute-end') {
+    state.computing = msg.payload === state.model
     if (msg.payload && msg.payload.model === state.model) {
       startSpeech(msg.payload.response)
     }
@@ -38,7 +39,7 @@ socket.addEventListener('message', message => {
 })
 
 document.querySelector('#send').addEventListener('click', () => {
-  state.model = document.querySelector('#model').value
+  state.model = document.querySelector('#model').value.toLowerCase()
   if (!state.model) return console.log('no model name')
   send({
     type: 'model',

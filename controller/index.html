@@ -10,22 +10,15 @@
   </head>
   <body>
     <div id="app">
-      <header>
-        <button id="compute">compute</button>
-        <div id="clients">0</div>
-      </header>
-      <main>
-        <div id="order">
-          <ul id="list"></ul>
-        </div>
-        <div id="prompt">
-          <textarea
-            id="initial-prompt"
-            type="text"
-            placeholder="Enter start message..."
-          ></textarea>
-        </div>
-      </main>
+      <button id="compute">compute</button>
+      <button id="loop">loop (off)</button>
+      <div id="clients">0</div>
+      <ul id="models"></ul>
+      <textarea
+        id="prompt"
+        type="text"
+        placeholder="Initial prompt..."
+      ></textarea>
     </div>
     <script src="script.js"></script>
   </body>

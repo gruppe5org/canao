@@ -1,9 +1,9 @@
 let state = {
-  server: '172.17.15.68',
+  server: 'localhost' /* '172.17.15.68' */,
   from: null,
   model: '',
   models: [],
-  mode: '',
+  loop: false,
   computing: '',
 }
 
@@ -19,8 +19,16 @@ document.querySelector('#compute').addEventListener('click', () => {
   }
 })
 
+document.querySelector('#loop').addEventListener('click', () => {
+  send({
+    type: 'loop'
+  })
+  state.loop = !state.loop
+  updateUi()
+})
+
 document
-  .getElementById('initial-prompt')
+  .querySelector('#prompt')
   .addEventListener('keydown', (event) => {
     if (event.key == 'Enter') {
       event.preventDefault()
@@ -44,16 +52,24 @@ socket.addEventListener('message', message => {
 
   if (msg.type === 'compute-start') {
     state.computing = msg.payload
-  } else if (msg.type === 'speech-end') {
+  }
+
+  if (msg.type === 'compute-end') {
+    state.computing = msg.payload
+    console.log(state.computing)
+  }
+  
+  if (msg.type === 'speech-end') {
     if (msg.payload === state.computing) state.computing = ''
   }
 
   state.models = msg.state.models
+  state.loop = msg.state.loop
   updateUi()
 })
 
 function compute () {
-  const initialPrompt = document.querySelector('#initial-prompt').value
+  const initialPrompt = document.querySelector('#prompt').value
   if (!initialPrompt) {
     return console.log('no initial prompt')
   } else {
@@ -65,31 +81,27 @@ function compute () {
 }
 
 function updateUi () {
-  if (state.computing === ''){
-    document.querySelector('header').style.backgroundColor = 'red'
+  if (!state.computing){
+    document.querySelector('body').style.setProperty('--primary-color', 'red')
     document.querySelector('#compute').textContent = 'compute'
   } else {
-    document.querySelector('header').style.backgroundColor = 'green'
-    document.querySelector('#compute').textContent = 'abort'
+    document.querySelector('body').style.setProperty('--primary-color', 'blue')
+    document.querySelector('#compute').textContent = 'computing'
   }
 
   document.querySelector('#clients').textContent = state.models.length
+  document.querySelector('#loop').textContent = `loop (${state.loop ? 'on': 'off'})`
 
 
-  const list = document.querySelector('#list')
+  const list = document.querySelector('#models')
   list.innerHTML = ''
 
   state.models.forEach(item => {
-    const newItem = document.createElement('div')
+    const newItem = document.createElement('li')
     newItem.id = item.model
     newItem.innerHTML = item.model
     list.appendChild(newItem)
   })
-
-  if (state.computing !== '') {
-    console.log('highlight', state.computing)
-    document.querySelector(`#${state.computing}`).classList.add('highlight')
-  } 
 }
 
 function send (msg) {
