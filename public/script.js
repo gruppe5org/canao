@@ -1,5 +1,5 @@
 let state = {
-  server: 'localhost' /* '172.17.15.68' */,
+  server: '172.17.15.68',
   from: null,
   model: '',
   models: [],
@@ -49,13 +49,12 @@ document.querySelector('#send').addEventListener('click', () => {
 })
 
 function updateUi () {
-  document.querySelector('#clients').textContent = state.models.length
   document.querySelector('#from').textContent = state.from
   document.querySelector('#model').value = state.model
-  if (state.computing) {
-    document.querySelector('header').style.background = 'green'
+  if (!state.computing){
+    document.querySelector('body').style.setProperty('--primary-color', 'red')
   } else {
-    document.querySelector('header').style.background = 'red'
+    document.querySelector('body').style.setProperty('--primary-color', 'blue')
   }
 }
 
@@ -73,7 +72,7 @@ function send (msg) {
 }
 
 function startSpeech (text) {
-  const textContainer = document.querySelector('#response-container')
+  const textContainer = document.querySelector('#response')
   textContainer.innerHTML = ''
 
   const words = text.split('')

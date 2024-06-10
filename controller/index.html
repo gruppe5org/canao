@@ -6,13 +6,15 @@
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕹️</text></svg>"
     />
     <title>CLOUDS ARE NOT AN OPTION 🚫☁️</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <div id="app">
-      <button id="compute">compute</button>
-      <button id="loop">loop (off)</button>
+    <div id="app" class="controller">
+      <p id="controller">controller</p>
+      <p id="from">000.000.00.00</p>
       <div id="clients">0</div>
+      <button id="loop">loop (off)</button>
+      <button id="compute">compute</button>
       <ul id="models"></ul>
       <textarea
         id="prompt"

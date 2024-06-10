@@ -1,5 +1,5 @@
 let state = {
-  server: 'localhost' /* '172.17.15.68' */,
+  server: '172.17.15.68',
   from: null,
   model: '',
   models: [],
@@ -46,6 +46,10 @@ socket.addEventListener('message', message => {
   const msg = JSON.parse(message.data)
   console.log(msg)
 
+  if (msg.type === 'init') {
+    state.from = msg.from
+  }
+
   if (msg.type === 'model') {
     console.log(state.models)
   }
@@ -88,7 +92,8 @@ function updateUi () {
     document.querySelector('body').style.setProperty('--primary-color', 'blue')
     document.querySelector('#compute').textContent = 'computing'
   }
-
+  
+  document.querySelector('#from').textContent = state.from
   document.querySelector('#clients').textContent = state.models.length
   document.querySelector('#loop').textContent = `loop (${state.loop ? 'on': 'off'})`
 
