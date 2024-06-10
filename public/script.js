@@ -4,7 +4,7 @@ let state = {
   model: '',
   models: [],
   mode: '',
-  computing: false
+  computing: ''
 }
 
 const socket = new WebSocket(`ws://${state.server}:2125`)
@@ -23,10 +23,13 @@ socket.addEventListener('message', message => {
   }
 
   if (msg.type === 'compute-start') {
-    state.computing = msg.payload === state.model
+    if (msg.payload === state.model) {
+      state.computing = state.model
+    } else {
+      state.computing = msg.payload
+    }
     console.log(state.model, state.computing)
   } else if (msg.type == 'compute-end') {
-    state.computing = msg.payload === state.model
     if (msg.payload && msg.payload.model === state.model) {
       startSpeech(msg.payload.response)
     }
@@ -51,16 +54,32 @@ document.querySelector('#send').addEventListener('click', () => {
 function updateUi () {
   document.querySelector('#from').textContent = state.from
   document.querySelector('#model').value = state.model
-  if (!state.computing){
-    document.querySelector('body').style.setProperty('--primary-color', 'red')
-  } else {
+
+  if (state.computing !== state.model) {
     document.querySelector('body').style.setProperty('--primary-color', 'blue')
+  } else {
+    document.querySelector('body').style.setProperty('--primary-color', 'red')
   }
+  const list = document.querySelector('#models')
+  list.innerHTML = ''
+
+  state.models.forEach(item => {
+    const newItem = document.createElement('li')
+    newItem.id = item.model
+    newItem.innerHTML = item.model
+    list.appendChild(newItem)
+  })
+
+  if (state.computing !== '') {
+    console.log('highlight', state.computing)
+    document.querySelector(`#${state.computing}`).classList.add('highlight')
+  } 
 }
 
 function loadState () {
-  if (!localStorage.getItem('state')) return
-  else state = JSON.parse(localStorage.getItem('state'))
+  if (localStorage.getItem('state')) {
+    state = JSON.parse(localStorage.getItem('state'))
+  }
 }
 
 function saveState () {
@@ -88,10 +107,12 @@ function startSpeech (text) {
     span.textContent = word
     span.id = `word-${event.charIndex}`
     textContainer.appendChild(span)
+
+    textContainer.scrollTop = textContainer.scrollHeight
   })
 
   utterance.addEventListener('end', (event) => {
-    state.computing = false
+    state.computing = ''
     updateUi()
 
     send({
@@ -102,7 +123,7 @@ function startSpeech (text) {
 
   const voices = speechSynthesis.getVoices()
   utterance.voice = voices[0]
-  utterance.rate = 3
+  utterance.rate = 1
 
   window.speechSynthesis.speak(utterance)
 }

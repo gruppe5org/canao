@@ -8,6 +8,14 @@ The workshop CLOUDS ARE NOT AN OPTION will contextualise recent AI systems accor
 Together we aim to provide a basic understanding of the internal mechanisms of large language models, their underlying training structure, datasets and tools, while offering concrete practical insights into how to run small scale models, offline and locally using alternative open source approaches. The outcome of this workshop will be a collective screencast, which shares our gathered insights and yields an alternative way to practise the ambiguous technological stack.
 </details>
 
+## Resources
+- 🦜
+- Open Source Paper
+- ChatGPT Filter
+- Sydney System Prompt
+- Rube Goldberg machine
+Phönomene Zeigen
+
 ## Workshop Concept
 In the workshop we use a custom made interface to chain multiple LLMs that run locally on the participants computers. Each group of participants should decide on a base model and adjust a custom model file. The goal is that very group develops a concept of their model, that serves a certain purpose or represents a certain persona. The workshop will result in a collective performance, the output from one group's model serves as the input for the next group's model, similar to a [Ruth Goldberg machine](https://en.wikipedia.org/wiki/Rube_Goldberg_machine). The workshop will alternate between group work and collaborative testing to adapt the models for performance. 
 
@@ -15,10 +23,36 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 1. Install Ollama on your computer: Follow the provided instructions that explain how to run a LLM locally.
 2. Download the custom interface: Follow the provided instructions to set up your computer in order to take part in the collective performance.  
 3. Conceptualize your model: Think about a concept, narrative, or persona for your model.  
-4. Adjust your custom model: Modify the custom model file to align with your chosen concept, narrative, or persona.  
+4. Adjust your custom model: Modify the custom model file to align with your chosen concept, narrative, or persona. Edit the exmaple.png in the canao folder and create your own visual. 
 5. Test the model: Use the terminal interface to test your customized model.  
 6. Collaborative tests: Get together with other groups to test the collective performance using the custom interface. Define an order for the models. 
 7. Iterate and refine: Based on the performance test, return to step 4 to further adjust and improve your model. Iterate until the time is up.  
+
+### Timeline
+
+14:00 – 14:15 15 min **Welcome**  
+14:15 – 14:45 30 min **Input**  
+14:45 – 15:15 30 min **Setup** (Step 1-2)  
+15:15 – 15:45 30 min **Group Work** (Step 3-5)  
+
+15:45 – 16:15 30 min **Collaborative Test** (Step 6)  
+16:15 – 17:15 60 min **Group Work**, we start a collaborative test every 15 min (Step 7)  
+17:15 – 17:30 15 min **Performance Preperation, Setup**  
+
+18:15 – 18:30 15 min **Workshop Results**
+
+### Presentation
+
+What is fixed:
+- Each group has one computer that represents one concept and runs one LLM locally
+- The computers are chained and respond to each other
+
+What has to be defined:
+- Order of the chain
+- Are the concepts explained? If so, at what point?
+- Are the system prompts / concepts visually displayed at the presentation?
+- 
+
 
 
 ## Install Ollama and configure a custom model 

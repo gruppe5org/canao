@@ -59,8 +59,7 @@ socket.addEventListener('message', message => {
   }
 
   if (msg.type === 'compute-end') {
-    state.computing = msg.payload
-    console.log(state.computing)
+    state.computing = msg.payload.model
   }
   
   if (msg.type === 'speech-end') {
@@ -86,13 +85,13 @@ function compute () {
 
 function updateUi () {
   if (!state.computing){
-    document.querySelector('body').style.setProperty('--primary-color', 'red')
+    document.querySelector('body').style.setProperty('--primary-color', 'blue')
     document.querySelector('#compute').textContent = 'compute'
   } else {
-    document.querySelector('body').style.setProperty('--primary-color', 'blue')
+    document.querySelector('body').style.setProperty('--primary-color', 'red')
     document.querySelector('#compute').textContent = 'computing'
   }
-  
+
   document.querySelector('#from').textContent = state.from
   document.querySelector('#clients').textContent = state.models.length
   document.querySelector('#loop').textContent = `loop (${state.loop ? 'on': 'off'})`
@@ -107,6 +106,11 @@ function updateUi () {
     newItem.innerHTML = item.model
     list.appendChild(newItem)
   })
+
+  if (state.computing !== '') {
+    console.log('highlight', state.computing)
+    document.querySelector(`#${state.computing}`).classList.add('highlight')
+  } 
 }
 
 function send (msg) {

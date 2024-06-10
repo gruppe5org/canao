@@ -164,7 +164,7 @@ wss.on('connection', (ws, req) => {
     if (msg.type === 'init') {
       ws.send(JSON.stringify(msg))
     } else {
-      broadcast(JSON.stringify(msg), ws)
+      broadcast(JSON.stringify(msg))
     }
   })
 
