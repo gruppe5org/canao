@@ -7,7 +7,13 @@ const fetch = require('node-fetch')
 const app = express()
 
 app.use('/', express.static(path.join(__dirname, 'public')))
-app.use('/controller', express.static(path.join(__dirname, 'controller')))
+app.use('/c', express.static(path.join(__dirname, 'controller')))
+app.use('/h', express.static(path.join(__dirname, 'history')))
+
+app.get('/history', (req, res) => {
+  const h = handleHistory()
+  res.send(h)
+})
 
 app.listen(2124, () => console.log(`http://localhost:2124`))
 
@@ -19,13 +25,25 @@ const state = {
   loop: false
 }
 
-function log () {
+function handleHistory() {
+  const files = fs
+    .readdirSync(path.join(__dirname, 'logs'))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => {
+      const file = fs.readFileSync(path.join(__dirname, `logs/${f}`), 'utf-8')
+      return JSON.parse(file)
+    })
+
+  return files
+}
+
+function log() {
   console.log('creating log...')
   fs.writeFileSync(`${path.join(__dirname, 'logs')}/${Date.now()}.json`, JSON.stringify(state.history, null, 2))
   state.history = []
 }
 
-async function generate (model, prompt) {
+async function generate(model, prompt) {
   try {
     const response = await fetch(`http://${model.from}:11434/api/generate`, {
       method: 'POST',
@@ -68,7 +86,7 @@ async function handleCompute(promptOrModel) {
   }
 }
 
-async function compute (model, prompt) {
+async function compute(model, prompt) {
   sync({
     type: 'compute-start',
     payload: model.model
@@ -90,17 +108,17 @@ async function compute (model, prompt) {
   })
 }
 
-function broadcast (data, ws) {
+function broadcast(data, ws) {
   const msg = JSON.stringify(data)
 
   if (!ws) {
-    wss.clients.forEach(client => {
+    wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(msg)
       }
     })
   } else {
-    wss.clients.forEach(client => {
+    wss.clients.forEach((client) => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(msg)
       }
@@ -108,20 +126,20 @@ function broadcast (data, ws) {
   }
 }
 
-function sync (msg) {
+function sync(msg) {
   msg.from = 'server'
   msg.state = state
 
   broadcast(msg)
 }
 
-function handleModel (payload, from) {
+function handleModel(payload, from) {
   const model = {
     model: payload,
     from: from
   }
 
-  const find = state.models.find(m => m.from === from)
+  const find = state.models.find((m) => m.from === from)
   if (find) {
     const index = state.models.indexOf(find)
     state.models[index] = model
@@ -132,11 +150,11 @@ function handleModel (payload, from) {
   }
 }
 
-function handleOrder (models) {
-  state.models = models.map((mn) => state.models.find((m) => m.model === mn ))
+function handleOrder(models) {
+  state.models = models.map((mn) => state.models.find((m) => m.model === mn))
 }
 
-function handleLoop () {
+function handleLoop() {
   state.loop = !state.loop
 }
 
@@ -144,7 +162,7 @@ wss.on('connection', (ws, req) => {
   const ip = req.socket.remoteAddress.replace('::ffff:', '')
   console.log('connection', ip)
 
-  ws.on('message', async data => {
+  ws.on('message', async (data) => {
     const msg = JSON.parse(data)
 
     msg.from = ip
@@ -169,7 +187,7 @@ wss.on('connection', (ws, req) => {
     if (msg.type === 'abort') {
       /* stop all computation? */
     }
-    
+
     if (msg.type === 'speech-end') {
       handleCompute(msg.payload)
     }
@@ -182,13 +200,13 @@ wss.on('connection', (ws, req) => {
   })
 
   ws.on('close', () => {
-    const find = state.models.find(m => m.from === ip)
+    const find = state.models.find((m) => m.from === ip)
     if (find) {
       const index = state.models.indexOf(find)
       state.models.splice(index, 1)
       console.log('deleted model', find.model)
     }
-    state.models = state.models.filter(m => m.from !== ip)
+    state.models = state.models.filter((m) => m.from !== ip)
     sync({
       type: 'disconnect'
     })
