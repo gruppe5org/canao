@@ -156,6 +156,11 @@ img {
 }
 
 #visual {
+  grid-column: 1 / span 4;
+  grid-row: 2 / span 8;
+}
+
+.tts #visual {
   grid-column: 5 / span 2;
   grid-row: 6 / span 4;
 }

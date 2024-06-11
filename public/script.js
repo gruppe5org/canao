@@ -33,7 +33,7 @@ socket.addEventListener('message', message => {
   
   if (msg.type == 'compute-end') {
     if (msg.payload && msg.payload.model === state.model) {
-      startSpeech(msg.payload.response)
+      tts(msg.payload.response)
     } else {
       state.computing = ''
     }
@@ -96,7 +96,8 @@ function send (msg) {
   socket.send(JSON.stringify(msg))
 }
 
-function startSpeech (text) {
+function tts (text) {
+  document.querySelector('body').classList.add('tts')
   const textContainer = document.querySelector('#response')
   textContainer.innerHTML = ''
 
@@ -118,6 +119,7 @@ function startSpeech (text) {
   })
 
   utterance.addEventListener('end', (event) => {
+    document.querySelector('body').classList.remove('tts')
     state.computing = ''
     updateUi()
 
