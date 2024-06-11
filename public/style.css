@@ -9,11 +9,15 @@ body {
 }
 
 body {
-  --primary-color: '';
+  --primary-color: blue;
   --secondary-color: black;
   font-family: Arial, sans-serif;
   font-size: 22px;
   background: var(--secondary-color);
+}
+
+body.computing {
+  --primary-color: red;
 }
 
 p {
@@ -100,27 +104,35 @@ img {
   padding: 3rem;
   display: block;
   overflow-y: scroll;
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 #response::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+  display: none;
 }
 
-#models > * {
+.controller.computing #models {
+  cursor: not-allowed;
+}
+
+.controller.computing .model {
+  pointer-events: none;
+}
+
+.controller .model {
+  cursor: move;
+}
+
+.model {
   padding: 0.5rem 1rem;
   border-radius: 100px;
+  user-select: none;
 }
 
-.highlight {
+.model.highlight {
   color: var(--primary-color);
   background: var(--secondary-color);
-}
-
-.interface #models {
-  grid-column: 5 / span 2;
-  grid-row: 2 / span 4;
 }
 
 /* grid */
@@ -146,6 +158,11 @@ img {
 #visual {
   grid-column: 5 / span 2;
   grid-row: 6 / span 4;
+}
+
+.interface #models {
+  grid-column: 5 / span 2;
+  grid-row: 2 / span 4;
 }
 
 /* controller */

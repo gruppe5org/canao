@@ -1,5 +1,5 @@
 let state = {
-  server: '172.17.15.68',
+  server: '192.168.178.21' /* '172.17.15.68' */,
   from: null,
   model: '',
   models: [],
@@ -29,11 +29,15 @@ socket.addEventListener('message', message => {
       state.computing = msg.payload
     }
     console.log(state.model, state.computing)
-  } else if (msg.type == 'compute-end') {
+  }
+  
+  if (msg.type == 'compute-end') {
     if (msg.payload && msg.payload.model === state.model) {
       startSpeech(msg.payload.response)
+    } else {
+      state.computing = ''
     }
-  } 
+  }
 
   state.models = msg.state.models
   state.mode = msg.state.mode
@@ -55,19 +59,21 @@ function updateUi () {
   document.querySelector('#from').textContent = state.from
   document.querySelector('#model').value = state.model
 
-  if (state.computing !== state.model) {
-    document.querySelector('body').style.setProperty('--primary-color', 'blue')
+  if (!state.model || state.computing !== state.model) {
+    document.querySelector('body').classList.remove('computing')
   } else {
-    document.querySelector('body').style.setProperty('--primary-color', 'red')
+    document.querySelector('body').classList.add('computing')
   }
+
   const list = document.querySelector('#models')
   list.innerHTML = ''
 
-  state.models.forEach(item => {
-    const newItem = document.createElement('li')
-    newItem.id = item.model
-    newItem.innerHTML = item.model
-    list.appendChild(newItem)
+  state.models.forEach((m) => {
+    const li = document.createElement('li')
+    li.id = m.model
+    li.classList = 'model'
+    li.innerHTML = m.model
+    list.appendChild(li)
   })
 
   if (state.computing !== '') {

@@ -1,5 +1,5 @@
 let state = {
-  server: '172.17.15.68',
+  server: '192.168.178.21' /* '172.17.15.68' */,
   from: null,
   model: '',
   models: [],
@@ -59,11 +59,17 @@ socket.addEventListener('message', message => {
   }
 
   if (msg.type === 'compute-end') {
-    state.computing = msg.payload.model
+    if (msg.payload) {
+      state.computing = msg.payload.model
+    } else {
+      state.computing = ''
+    }
   }
   
   if (msg.type === 'speech-end') {
-    if (msg.payload === state.computing) state.computing = ''
+    if (msg.payload === state.computing) {
+      state.computing = ''
+    }
   }
 
   state.models = msg.state.models
@@ -72,23 +78,23 @@ socket.addEventListener('message', message => {
 })
 
 function compute () {
-  const initialPrompt = document.querySelector('#prompt').value
-  if (!initialPrompt) {
+  const prompt = document.querySelector('#prompt').value
+  if (!prompt) {
     return console.log('no initial prompt')
   } else {
     send({
       type: 'compute',
-      payload: initialPrompt
+      payload: prompt
     })
   }
 }
 
 function updateUi () {
-  if (!state.computing){
-    document.querySelector('body').style.setProperty('--primary-color', 'blue')
+  if (!state.computing) {
+    document.querySelector('body').classList.remove('computing')
     document.querySelector('#compute').textContent = 'compute'
   } else {
-    document.querySelector('body').style.setProperty('--primary-color', 'red')
+    document.querySelector('body').classList.add('computing')
     document.querySelector('#compute').textContent = 'computing'
   }
 
@@ -96,19 +102,53 @@ function updateUi () {
   document.querySelector('#clients').textContent = state.models.length
   document.querySelector('#loop').textContent = `loop (${state.loop ? 'on': 'off'})`
 
-
   const list = document.querySelector('#models')
   list.innerHTML = ''
 
-  state.models.forEach(item => {
-    const newItem = document.createElement('li')
-    newItem.id = item.model
-    newItem.innerHTML = item.model
-    list.appendChild(newItem)
+  state.models.forEach((m) => {
+    const li = document.createElement('li')
+    li.id = m.model
+    li.classList = 'model'
+    li.draggable = true
+    li.innerHTML = m.model
+
+    li.addEventListener('dragstart', function (e) {
+      if (state.computing !== '') return
+      dragged = this
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.setData('text/html', this.innerHTML)    
+    })
+
+    li.addEventListener('dragover', function (e) {
+      if (state.computing !== '') return
+      e.preventDefault()
+      return false
+    })
+
+    li.addEventListener('drop', function (e) {
+      if (state.computing !== '') return
+      e.stopPropagation()
+      if (dragged !== this) {
+        dragged.innerHTML = this.innerHTML
+        dragged.id = this.id
+        const model = e.dataTransfer.getData('text/html')
+        this.innerHTML = model
+        this.id = model
+
+        const models = [...document.querySelectorAll('.model')].map((m) => m.innerHTML)
+        send({
+          type: 'order',
+          payload: models
+        })
+      }
+      return false       
+    })
+
+    list.appendChild(li)
   })
 
   if (state.computing !== '') {
-    console.log('highlight', state.computing)
+    console.log('computing', state.computing)
     document.querySelector(`#${state.computing}`).classList.add('highlight')
   } 
 }

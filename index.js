@@ -91,16 +91,18 @@ async function compute (model, prompt) {
 }
 
 function broadcast (data, ws) {
+  const msg = JSON.stringify(data)
+
   if (!ws) {
     wss.clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(data)
+        client.send(msg)
       }
     })
   } else {
     wss.clients.forEach(client => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(data)
+        client.send(msg)
       }
     })
   }
@@ -110,16 +112,16 @@ function sync (msg) {
   msg.from = 'server'
   msg.state = state
 
-  broadcast(JSON.stringify(msg))
+  broadcast(msg)
 }
 
-function handleModel (msg) {
+function handleModel (payload, from) {
   const model = {
-    model: msg.payload,
-    from: msg.from
+    model: payload,
+    from: from
   }
 
-  const find = state.models.find(m => m.from === msg.from)
+  const find = state.models.find(m => m.from === from)
   if (find) {
     const index = state.models.indexOf(find)
     state.models[index] = model
@@ -128,6 +130,14 @@ function handleModel (msg) {
     state.models.push(model)
     console.log('added model', model.model)
   }
+}
+
+function handleOrder (models) {
+  state.models = models.map((mn) => state.models.find((m) => m.model === mn ))
+}
+
+function handleLoop () {
+  state.loop = !state.loop
 }
 
 wss.on('connection', (ws, req) => {
@@ -141,20 +151,23 @@ wss.on('connection', (ws, req) => {
     msg.state = state
 
     if (msg.type === 'model') {
-      handleModel(msg)
+      handleModel(msg.payload, msg.from)
     }
 
     if (msg.type === 'compute') {
       handleCompute(msg.payload)
     }
 
-    if (msg.type === 'abort') {
-      /* stop all computation */
+    if (msg.type === 'loop') {
+      handleLoop()
     }
 
-    if (msg.type === 'loop') {
-      state.loop = !state.loop
-      console.log('loop', state.loop)
+    if (msg.type === 'order') {
+      handleOrder(msg.payload)
+    }
+
+    if (msg.type === 'abort') {
+      /* stop all computation? */
     }
     
     if (msg.type === 'speech-end') {
@@ -164,7 +177,7 @@ wss.on('connection', (ws, req) => {
     if (msg.type === 'init') {
       ws.send(JSON.stringify(msg))
     } else {
-      broadcast(JSON.stringify(msg))
+      broadcast(msg)
     }
   })
 
