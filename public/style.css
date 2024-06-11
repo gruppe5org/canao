@@ -20,6 +20,14 @@ body.computing {
   --primary-color: red;
 }
 
+body.no-models {
+  cursor: not-allowed;
+}
+
+body.no-models > * {
+  pointer-events: none;
+}
+
 p {
   margin: 0;
 }

@@ -48,12 +48,11 @@ socket.addEventListener('message', message => {
 
 document.querySelector('#send').addEventListener('click', () => {
   state.model = document.querySelector('#model').value.toLowerCase()
-  if (!state.model) return console.log('no model name')
+  if (!state.model) return console.log('no model')
   send({
     type: 'model',
     payload: state.model
   })
-  saveState()
 })
 
 function updateUi () {
@@ -82,8 +81,9 @@ function updateUi () {
 
   if (state.ollamas.length === 0) {
     const op = document.createElement('option')
-    op.innerHTML = 'no models yet'
+    op.innerHTML = 'no model ⛔️'
     select.appendChild(op)
+    document.querySelector('body').classList.add('no-models')
   } else {
     state.ollamas?.forEach((m) => {
       const op = document.createElement('option')
@@ -91,6 +91,7 @@ function updateUi () {
       op.innerHTML = m.name
       select.appendChild(op)
     })
+    document.querySelector('body').classList.remove('no-models')
   }
 
   if (state.computing !== '') {
@@ -128,6 +129,7 @@ async function loadOllama () {
 function loadState () {
   if (localStorage.getItem('state')) {
     state = JSON.parse(localStorage.getItem('state'))
+    console.log(state)
   }
 }
 
@@ -180,7 +182,6 @@ function tts (text) {
 }
 
 async function init () {
-  loadState()
   await loadOllama()
   updateUi()
 }
