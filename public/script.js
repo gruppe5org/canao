@@ -1,6 +1,7 @@
 let state = {
   server: '192.168.178.21' /* '172.17.15.68' */,
   from: null,
+  ollamas: [],
   model: '',
   models: [],
   mode: '',
@@ -57,7 +58,7 @@ document.querySelector('#send').addEventListener('click', () => {
 
 function updateUi () {
   document.querySelector('#from').textContent = state.from
-  document.querySelector('#model').value = state.model
+  if (state.ollamas.find((m) => m.name === state.model)) document.querySelector('#model').value = state.model
 
   if (!state.model || state.computing !== state.model) {
     document.querySelector('body').classList.remove('computing')
@@ -65,21 +66,63 @@ function updateUi () {
     document.querySelector('body').classList.add('computing')
   }
 
-  const list = document.querySelector('#models')
-  list.innerHTML = ''
+  const ul = document.querySelector('#models')
+  ul.innerHTML = ''
 
   state.models.forEach((m) => {
     const li = document.createElement('li')
     li.id = m.model
     li.classList = 'model'
     li.innerHTML = m.model
-    list.appendChild(li)
+    ul.appendChild(li)
   })
+  
+  const select = document.querySelector('#model')
+  select.innerHTML = ''
+
+  if (state.ollamas.length === 0) {
+    const op = document.createElement('option')
+    op.innerHTML = 'no models yet'
+    select.appendChild(op)
+  } else {
+    state.ollamas?.forEach((m) => {
+      const op = document.createElement('option')
+      op.value = m.name
+      op.innerHTML = m.name
+      select.appendChild(op)
+    })
+  }
 
   if (state.computing !== '') {
     console.log('highlight', state.computing)
     document.querySelector(`#${state.computing}`).classList.add('highlight')
   } 
+}
+
+async function loadOllama () {
+  const url = 'http://localhost:11434/api'
+
+  try {
+    const r = await fetch(`${url}/tags`)
+    const tags = await r.json()
+    const models = tags.models.map((t) => t.name.replace(':latest', ''))
+    state.ollamas = await Promise.all(models.map(async (m) => {
+      const response = await fetch(`${url}/show`, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: m
+        })
+      })
+      return {
+        ...await response.json(),
+        name: m,
+      }
+    }))
+    return state.ollamas
+  } catch (e) {
+    console.log('no ollamas')
+    return state.ollamas
+  }
 }
 
 function loadState () {
@@ -136,8 +179,9 @@ function tts (text) {
   window.speechSynthesis.speak(utterance)
 }
 
-function init () {
+async function init () {
   loadState()
+  await loadOllama()
   updateUi()
 }
 

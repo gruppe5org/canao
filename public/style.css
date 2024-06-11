@@ -39,15 +39,18 @@ button:hover {
   filter: blur(2px);
 }
 
-input {
+select {
+  flex-flow: row nowrap !important;
   padding: 0.25em;
   font-family: Arial, sans-serif;
   text-transform: uppercase;
   text-align: center;
+  text-align-last: center;
   color: var(--secondary-color);
   border: 0;
   border-radius: 5px;
   outline: none;
+  appearance: none;
 }
 
 textarea {
