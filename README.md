@@ -61,8 +61,9 @@ What has to be defined:
 
 1. Download [Ollama](https://www.ollama.com/)
 2. Open Ollama
-3. Set enviroment variable, `OLLAMA_HOST = 0.0.0.0` [read the docs for instructions on how to set enviroment variables on Windows/MacOS/Linux](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server). 
-4. Also set the enviroment variable `OLLAMA_ORIGINS "*"` The enviroment variables are required to enable our computers to communicate with each other. Step 3 and 4 are not required when you just want to use Ollama locally. But we need it for our custom interface to work.
+3. Set enviroment variable, `OLLAMA_HOST = 0.0.0.0` [read the docs for instructions on how to set enviroment variables on Windows/MacOS/Linux](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server)
+4. Also set the enviroment variable `OLLAMA_ORIGINS "*"` The enviroment variables are required to enable our computers to communicate with each other. Step 3 and 4 are not required when you just want to use Ollama locally. But we need it for our custom interface to work
+5. Restart Ollama
 
 ### Base Models
 Ollama comes with a [selection of suppoted models](https://ollama.com/library) that have been trained and fine-tuned for different purposes. You can download and run any of these models as long as they fit into your computers RAM. 
