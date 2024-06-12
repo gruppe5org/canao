@@ -1,6 +1,6 @@
 # CLOUDS ARE NOT AN OPTION @HiddenLayersConference
 
-!()[]
+![](setup.png)
 
 _This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [Hidden Layers Conference](https://hiddenlayers.de/) for AI and Design at [Köln International School of Design](https://kisd.de/en/) from June 12-15, 2024_
 
