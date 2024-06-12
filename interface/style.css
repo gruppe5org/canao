@@ -237,7 +237,6 @@ img {
 
 #system {
   padding-left: 100vw;
-  /* animation: marquee 60s linear infinite; */
 }
 
 @keyframes marquee {
