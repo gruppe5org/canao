@@ -61,7 +61,7 @@ What has to be defined:
 
 1. Download [Ollama](https://www.ollama.com/)
 2. Open Ollama
-3. Set enviroment variable, `OLLAMA_HOST = 0.0.0.0` [read the docs for instructions](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server). 
+3. Set enviroment variable, `OLLAMA_HOST = 0.0.0.0` [read the docs for instructions on how to set enviroment variables on Windows/MacOS/Linux](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server). 
 4. Also set the enviroment variable `OLLAMA_ORIGINS "*"` The enviroment variables are required to enable our computers to communicate with each other. Step 3 and 4 are not required when you just want to use Ollama locally. But we need it for our custom interface to work.
 
 ### Base Models
