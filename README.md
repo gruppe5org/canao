@@ -45,17 +45,8 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 
 18:15 – 18:30 15 min **Workshop Results**
 
-### Presentation
-
-What is fixed:
-- Each group has one computer that represents one concept and runs one LLM locally
-- The computers are chained and respond to each other
-
-What has to be defined:
-- Order of the chain
-- Are the concepts explained? If so, at what point?
-- Are the system prompts / concepts visually displayed at the presentation?
-
+# Exhibition / Performance
+The outcome of this workshop is a collective performance, where every group has one computer, that represents one concept and runs a large language model locally. The computers are chained and respond to each other in order to create an endless chain of computer conversations.
 
 ## Install Ollama and configure a custom model 
 
