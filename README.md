@@ -9,12 +9,14 @@ Together we aim to provide a basic understanding of the internal mechanisms of l
 </details>
 
 ## Resources
-- 🦜
-- Open Source Paper
-- ChatGPT Filter
-- Sydney System Prompt
-- Rube Goldberg machine
-Phönomene Zeigen
+[Paper: On the Dangers of Stochastic Parrots: Can Language Models Be Too Big? 🦜 (2021)](https://dl.acm.org/doi/10.1145/3442188.3445922)  
+[Paper: Open (For Business): Big Tech, Concentrated Power, and the Political Economy of Open AI (2023)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4543807)  
+[Tweet: The entire prompt of Microsoft Bing Chat?! (2023)](https://x.com/kliu128/status/1623472922374574080)  
+[Tweet: Sydney/Bing threatens to kill me (2023)](https://x.com/sethlazar/status/1626257535178280960)  
+[Article: OpenAI Used Kenyan Workers on Less Than $2 Per Hour to Make ChatGPT Less Toxic (2023)](https://time.com/6247678/openai-chatgpt-kenya-workers/)  
+[Talk: Deconstructing the Endless Engagement Aesthetics of AI Platforms (2024)](https://youtu.be/4AOYm72N0YE?si=_cIE0gC9ohUcoSom&t=311)  
+
+
 
 ## Workshop Concept
 In the workshop we use a custom made interface to chain multiple LLMs that run locally on the participants computers. Each group of participants should decide on a base model and adjust a custom model file. The goal is that very group develops a concept of their model, that serves a certain purpose or represents a certain persona. The workshop will result in a collective performance, the output from one group's model serves as the input for the next group's model, similar to a [Ruth Goldberg machine](https://en.wikipedia.org/wiki/Rube_Goldberg_machine). The workshop will alternate between group work and collaborative testing to adapt the models for performance. 
@@ -51,8 +53,6 @@ What has to be defined:
 - Order of the chain
 - Are the concepts explained? If so, at what point?
 - Are the system prompts / concepts visually displayed at the presentation?
-- 
-
 
 
 ## Install Ollama and configure a custom model 
