@@ -236,7 +236,7 @@ img {
 }
 
 #system {
-  margin-left: 100vw;
+  padding-left: 100vw;
   /* animation: marquee 60s linear infinite; */
 }
 
