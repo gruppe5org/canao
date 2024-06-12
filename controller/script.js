@@ -50,10 +50,6 @@ socket.addEventListener('message', message => {
     state.from = msg.from
   }
 
-  if (msg.type === 'model') {
-    console.log(state.models)
-  }
-
   if (msg.type === 'compute-start') {
     state.computing = msg.payload
   }
@@ -148,12 +144,10 @@ function updateUi () {
   })
 
   if (state.computing !== '') {
-    console.log('computing', state.computing)
     document.querySelector(`#${state.computing}`).classList.add('highlight')
   } 
 }
 
 function send (msg) {
-  console.log('send', msg)
   socket.send(JSON.stringify(msg))
 }

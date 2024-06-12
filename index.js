@@ -66,9 +66,7 @@ async function generate(model, prompt) {
 }
 
 async function handleCompute(promptOrModel) {
-  console.log(promptOrModel)
   const model = state.models.find((m) => m.model === promptOrModel)
-  console.log(model)
   if (model) {
     if (model === state.models[state.models.length - 1]) {
       if (state.loop) {
@@ -93,7 +91,6 @@ async function compute(model, prompt) {
   })
   console.log('computing', model.model)
   const response = await generate(model, prompt)
-  console.log('repsonse', response)
   if (response) {
     state.history.push({
       model,

@@ -1,5 +1,5 @@
 let state = {
-  server: '192.168.178.21' /* '172.17.15.68' */,
+  server: '172.17.13.105' /* '172.17.15.68' */,
   from: null,
   ollamas: [],
   model: '',
@@ -29,14 +29,11 @@ socket.addEventListener('message', message => {
     } else {
       state.computing = msg.payload
     }
-    console.log(state.model, state.computing)
   }
   
   if (msg.type == 'compute-end') {
     if (msg.payload && msg.payload.model === state.model) {
       tts(msg.payload.response)
-    } else {
-      state.computing = ''
     }
   }
 
@@ -95,7 +92,6 @@ function updateUi () {
   }
 
   if (state.computing !== '') {
-    console.log('highlight', state.computing)
     document.querySelector(`#${state.computing}`).classList.add('highlight')
   } 
 }
@@ -129,7 +125,6 @@ async function loadOllama () {
 function loadState () {
   if (localStorage.getItem('state')) {
     state = JSON.parse(localStorage.getItem('state'))
-    console.log(state)
   }
 }
 
