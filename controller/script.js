@@ -1,10 +1,10 @@
 let state = {
-  server: '172.17.13.105' /* '172.17.15.68' */,
+  server: '192.0.0.2' /* '172.17.15.68' */,
   from: null,
-  model: '',
-  models: [],
+  model: null,
+  computing: null,
   loop: false,
-  computing: '',
+  models: []
 }
 
 const socket = new WebSocket(`ws://${state.server}:2125`)
@@ -27,14 +27,12 @@ document.querySelector('#loop').addEventListener('click', () => {
   updateUi()
 })
 
-document
-  .querySelector('#prompt')
-  .addEventListener('keydown', (event) => {
-    if (event.key == 'Enter') {
-      event.preventDefault()
-      compute()
-    }
-  })
+document.querySelector('#prompt').addEventListener('keydown', event => {
+  if (event.key == 'Enter') {
+    event.preventDefault()
+    compute()
+  }
+})
 
 socket.addEventListener('open', () => {
   send({
@@ -58,13 +56,13 @@ socket.addEventListener('message', message => {
     if (msg.payload) {
       state.computing = msg.payload.model
     } else {
-      state.computing = ''
+      state.computing = null
     }
   }
-  
+
   if (msg.type === 'speech-end') {
     if (msg.payload === state.computing) {
-      state.computing = ''
+      state.computing = null
     }
   }
 
@@ -96,12 +94,14 @@ function updateUi () {
 
   document.querySelector('#from').textContent = state.from
   document.querySelector('#clients').textContent = state.models.length
-  document.querySelector('#loop').textContent = `loop (${state.loop ? 'on': 'off'})`
+  document.querySelector('#loop').textContent = `loop (${
+    state.loop ? 'on' : 'off'
+  })`
 
   const list = document.querySelector('#models')
   list.innerHTML = ''
 
-  state.models.forEach((m) => {
+  state.models.forEach(m => {
     const li = document.createElement('li')
     li.id = m.model
     li.classList = 'model'
@@ -109,20 +109,20 @@ function updateUi () {
     li.innerHTML = m.model
 
     li.addEventListener('dragstart', function (e) {
-      if (state.computing !== '') return
+      if (state.computing) return
       dragged = this
       e.dataTransfer.effectAllowed = 'move'
-      e.dataTransfer.setData('text/html', this.innerHTML)    
+      e.dataTransfer.setData('text/html', this.innerHTML)
     })
 
     li.addEventListener('dragover', function (e) {
-      if (state.computing !== '') return
+      if (state.computing) return
       e.preventDefault()
       return false
     })
 
     li.addEventListener('drop', function (e) {
-      if (state.computing !== '') return
+      if (state.computing) return
       e.stopPropagation()
       if (dragged !== this) {
         dragged.innerHTML = this.innerHTML
@@ -131,21 +131,23 @@ function updateUi () {
         this.innerHTML = model
         this.id = model
 
-        const models = [...document.querySelectorAll('.model')].map((m) => m.innerHTML)
+        const models = [...document.querySelectorAll('.model')].map(
+          m => m.innerHTML
+        )
         send({
           type: 'order',
           payload: models
         })
       }
-      return false       
+      return false
     })
 
     list.appendChild(li)
   })
 
-  if (state.computing !== '') {
+  if (state.computing) {
     document.querySelector(`#${state.computing}`).classList.add('highlight')
-  } 
+  }
 }
 
 function send (msg) {

@@ -1,10 +1,10 @@
 let state = {
-  server: '172.17.13.105' /* '172.17.15.68' */,
+  server: '192.0.0.2' /* '172.17.15.68' */,
   from: null,
-  ollamas: [],
-  model: '',
+  model: null,
+  computing: null,
   models: [],
-  computing: ''
+  ollamas: []
 }
 
 const socket = new WebSocket(`ws://${state.server}:2125`)
@@ -23,18 +23,18 @@ socket.addEventListener('message', message => {
   }
 
   if (msg.type === 'compute-start') {
-    if (msg.payload === state.model) {
-      state.computing = state.model
-    } else {
-      state.computing = msg.payload
-    }
+    state.computing = msg.payload
   }
-  
+
   if (msg.type == 'compute-end') {
     if (msg.payload && msg.payload.model === state.model) {
       tts(msg.payload.response)
     }
   }
+
+  // if (msg.type === 'speech-end') {
+  //   state.computing = null
+  // }
 
   state.models = msg.state.models
   updateUi()
@@ -48,10 +48,12 @@ document.querySelector('#send').addEventListener('click', () => {
     payload: state.model
   })
 
-  const ollama = state.ollamas.find((o) => o.name === state.model)
+  const ollama = state.ollamas.find(o => o.name === state.model)
   if (ollama.system) {
     document.querySelector('#system').innerHTML = ollama.system
-    document.querySelector('#system').style.animation = `marquee ${ollama.system.length / 10}s linear infinite`
+    document.querySelector('#system').style.animation = `marquee ${
+      ollama.system.length / 10
+    }s linear infinite`
   } else {
     document.querySelector('#system').innerHTML = ''
     document.querySelector('#system').style.animation = ''
@@ -61,7 +63,8 @@ document.querySelector('#send').addEventListener('click', () => {
 
 function updateUi () {
   document.querySelector('#from').textContent = state.from
-  if (state.ollamas.find((m) => m.name === state.model)) document.querySelector('#model').value = state.model
+  if (state.ollamas.find(m => m.name === state.model))
+    document.querySelector('#model').value = state.model
 
   if (!state.model || state.computing !== state.model) {
     document.querySelector('body').classList.remove('computing')
@@ -72,14 +75,14 @@ function updateUi () {
   const ul = document.querySelector('#models')
   ul.innerHTML = ''
 
-  state.models.forEach((m) => {
+  state.models.forEach(m => {
     const li = document.createElement('li')
     li.id = m.model
     li.classList = 'model'
     li.innerHTML = m.model
     ul.appendChild(li)
   })
-  
+
   const select = document.querySelector('#model')
   select.innerHTML = ''
 
@@ -89,19 +92,21 @@ function updateUi () {
     select.appendChild(op)
     document.querySelector('body').classList.add('no-models')
   } else {
-    state.ollamas?.forEach((m) => {
+    state.ollamas?.forEach(m => {
       const op = document.createElement('option')
       op.value = m.name
       op.innerHTML = m.name
       select.appendChild(op)
     })
-    select.value = state.model
+    if (state.model) {
+      select.value = state.model
+    }
     document.querySelector('body').classList.remove('no-models')
   }
 
-  if (state.computing !== '') {
+  if (state.computing) {
     document.querySelector(`#${state.computing}`).classList.add('highlight')
-  } 
+  }
 }
 
 async function loadOllama () {
@@ -110,19 +115,21 @@ async function loadOllama () {
   try {
     const r = await fetch(`${url}/tags`)
     const tags = await r.json()
-    const models = tags.models.map((t) => t.name.replace(':latest', ''))
-    state.ollamas = await Promise.all(models.map(async (m) => {
-      const response = await fetch(`${url}/show`, {
-        method: 'POST',
-        body: JSON.stringify({
-          name: m
+    const models = tags.models.map(t => t.name.replace(':latest', ''))
+    state.ollamas = await Promise.all(
+      models.map(async m => {
+        const response = await fetch(`${url}/show`, {
+          method: 'POST',
+          body: JSON.stringify({
+            name: m
+          })
         })
+        return {
+          ...(await response.json()),
+          name: m.toLowerCase()
+        }
       })
-      return {
-        ...await response.json(),
-        name: m,
-      }
-    }))
+    )
     return state.ollamas
   } catch (e) {
     console.log('no ollamas')
@@ -137,10 +144,14 @@ function loadState () {
 }
 
 function saveState () {
-  localStorage.setItem('state', JSON.stringify({
-    ...state,
-    ollamas: []
-  }))
+  localStorage.setItem(
+    'state',
+    JSON.stringify({
+      ...state,
+      ollamas: [],
+      computing: null
+    })
+  )
 }
 
 function send (msg) {
@@ -156,7 +167,7 @@ function tts (text) {
   const utterance = new SpeechSynthesisUtterance(text)
 
   let prevChar = 0
-  utterance.addEventListener('boundary', (event) => {
+  utterance.addEventListener('boundary', event => {
     const char = event.charIndex + event.charLength
     const word = words.slice(prevChar, char).join('')
     prevChar = char
@@ -169,9 +180,9 @@ function tts (text) {
     textContainer.scrollTop = textContainer.scrollHeight
   })
 
-  utterance.addEventListener('end', (event) => {
+  utterance.addEventListener('end', event => {
     document.querySelector('body').classList.remove('tts')
-    state.computing = ''
+     state.computing = null
     updateUi()
 
     send({

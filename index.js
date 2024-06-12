@@ -61,6 +61,7 @@ async function generate(model, prompt) {
       return json
     }
   } catch (error) {
+    console.log(error)
     console.log('error while fetching', model.model)
   }
 }
