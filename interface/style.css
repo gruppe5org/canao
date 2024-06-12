@@ -80,8 +80,9 @@ li {
 
 img {
   width: 100%;
-  height: auto;
+  height: 100%;
   mix-blend-mode: darken;
+  object-fit: cover;
 }
 
 #app {
@@ -122,6 +123,7 @@ img {
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  z-index: 3;
 }
 
 #response::-webkit-scrollbar {
@@ -176,11 +178,15 @@ img {
   grid-column: 1 / span 4;
   grid-row: 2 / span 8;
   z-index: 5;
+  box-shadow: none;
 }
+
 
 .tts #visual {
   grid-column: 5 / span 2;
   grid-row: 6 / span 4;
+  z-index: 0;
+  box-shadow: 0 0 10em var(--secondary-color);
 }
 
 .interface #models {
