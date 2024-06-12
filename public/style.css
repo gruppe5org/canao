@@ -42,10 +42,10 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+/* button:hover {
   filter: hue-rotate(20deg);
   filter: blur(2px);
-}
+} */
 
 select {
   flex-flow: row nowrap !important;
@@ -111,6 +111,10 @@ img {
   box-shadow: 0 0 10em var(--secondary-color);
 }
 
+#app > *:hover {
+  z-index: 100;
+}
+
 #response {
   padding: 3rem;
   display: block;
@@ -124,7 +128,7 @@ img {
 }
 
 .controller.computing #models {
-  cursor: not-allowed;
+  cursor: progress;
 }
 
 .controller.computing .model {
@@ -151,6 +155,7 @@ img {
 #model {
   grid-column: 1 / span 3;
   text-align: center;
+  cursor: pointer;
 }
 
 #from {
@@ -216,4 +221,26 @@ img {
 #models {
   grid-column: 5 / span 2;
   grid-row: 3 / span 4;
+}
+
+#scroller {
+  grid-column: 1 / span 6;
+  grid-row: 10 / span 1;
+  align-items: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--primary-color);
+  background: transparent;
+  border-radius: 0px;
+  z-index: -5;
+}
+
+#system {
+  margin-left: 100vw;
+  /* animation: marquee 60s linear infinite; */
+}
+
+@keyframes marquee {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
 }

@@ -4,7 +4,6 @@ let state = {
   ollamas: [],
   model: '',
   models: [],
-  mode: '',
   computing: ''
 }
 
@@ -38,8 +37,6 @@ socket.addEventListener('message', message => {
   }
 
   state.models = msg.state.models
-  state.mode = msg.state.mode
-
   updateUi()
 })
 
@@ -50,6 +47,16 @@ document.querySelector('#send').addEventListener('click', () => {
     type: 'model',
     payload: state.model
   })
+
+  const ollama = state.ollamas.find((o) => o.name === state.model)
+  if (ollama.system) {
+    document.querySelector('#system').innerHTML = ollama.system
+    document.querySelector('#system').style.animation = `marquee ${ollama.system.length / 10}s linear infinite`
+  } else {
+    document.querySelector('#system').innerHTML = ''
+    document.querySelector('#system').style.animation = ''
+  }
+  saveState()
 })
 
 function updateUi () {
@@ -88,6 +95,7 @@ function updateUi () {
       op.innerHTML = m.name
       select.appendChild(op)
     })
+    select.value = state.model
     document.querySelector('body').classList.remove('no-models')
   }
 
@@ -129,7 +137,10 @@ function loadState () {
 }
 
 function saveState () {
-  localStorage.setItem('state', JSON.stringify(state))
+  localStorage.setItem('state', JSON.stringify({
+    ...state,
+    ollamas: []
+  }))
 }
 
 function send (msg) {
@@ -177,6 +188,7 @@ function tts (text) {
 }
 
 async function init () {
+  loadState()
   await loadOllama()
   updateUi()
 }
