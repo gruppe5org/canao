@@ -1,5 +1,7 @@
 # CLOUDS ARE NOT AN OPTION @HiddenLayersConference
 
+!()[]
+
 _This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [Hidden Layers Conference](https://hiddenlayers.de/) for AI and Design at [Köln International School of Design](https://kisd.de/en/) from June 12-15, 2024_
 
 <details>
@@ -25,7 +27,7 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 1. Install Ollama on your computer: Follow the provided instructions that explain how to run a LLM locally.
 2. Download the custom interface: Follow the provided instructions to set up your computer in order to take part in the collective performance.  
 3. Conceptualize your model: Think about a concept, narrative, or persona for your model.  
-4. Adjust your custom model: Modify the custom model file to align with your chosen concept, narrative, or persona. Edit the exmaple.png in the canao folder and create your own visual. 
+4. Adjust your custom model: Modify the custom model file to align with your chosen concept, narrative, or persona. Edit the visual.png in the canao folder and create your own visual. 
 5. Test the model: Use the terminal interface to test your customized model.  
 6. Collaborative tests: Get together with other groups to test the collective performance using the custom interface. Define an order for the models. 
 7. Iterate and refine: Based on the performance test, return to step 4 to further adjust and improve your model. Iterate until the time is up.  

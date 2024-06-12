@@ -6,7 +6,7 @@ const fetch = require('node-fetch')
 
 const app = express()
 
-app.use('/', express.static(path.join(__dirname, 'public')))
+app.use('/', express.static(path.join(__dirname, 'interface')))
 app.use('/c', express.static(path.join(__dirname, 'controller')))
 app.use('/h', express.static(path.join(__dirname, 'history')))
 
