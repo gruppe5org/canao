@@ -19,7 +19,7 @@ Together we aim to provide a basic understanding of the internal mechanisms of l
 [Talk: Deconstructing the Endless Engagement Aesthetics of AI Platforms (2024)](https://youtu.be/4AOYm72N0YE?si=_cIE0gC9ohUcoSom&t=311)  
 
 ## Workshop Concept
-In the workshop we use a custom made interface to chain multiple LLMs that run locally on the participants computers. Each group of participants should decide on a base model and adjust a custom model file. The goal is that very group develops a concept of their model, that serves a certain purpose or represents a certain persona. The workshop will result in a collective performance, the output from one group's model serves as the input for the next group's model, similar to a [Ruth Goldberg machine](https://en.wikipedia.org/wiki/Rube_Goldberg_machine). The workshop will alternate between group work and collaborative testing to adapt the models for the performance. 
+In the workshop we use a custom made interface to chain multiple LLMs that run locally on the participants computers. Each group of participants should decide on a base model and adjust a custom model file. The goal is that every group develops a concept of their model, that serves a certain purpose or represents a certain persona. The workshop will result in a collective performance, the output from one group's model serves as the input for the next group's model, similar to a [Rube Goldberg machine](https://en.wikipedia.org/wiki/Rube_Goldberg_machine). The workshop will alternate between group work and collaborative testing to adapt the models for the performance. 
 
 ### Steps:
 1. Install Ollama on your computer: Follow the provided instructions that explain how to run a LLM locally.
