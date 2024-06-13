@@ -3,6 +3,9 @@ let state = {
   from: null,
   model: null,
   computing: null,
+  voice: null,
+  speed: 1,
+  mute: false,
   models: [],
   ollamas: []
 }
@@ -32,10 +35,6 @@ socket.addEventListener('message', message => {
     }
   }
 
-  // if (msg.type === 'speech-end') {
-  //   state.computing = null
-  // }
-
   state.models = msg.state.models
   updateUi()
 })
@@ -61,10 +60,25 @@ document.querySelector('#send').addEventListener('click', () => {
   saveState()
 })
 
+document.querySelector('#speed').addEventListener('click', e => {
+  state.speed = (Math.round((state.speed + 0.1) * 10) / 10) % 3
+  updateUi()
+})
+
+document.querySelector('#mute').addEventListener('click', e => {
+  state.mute = !state.mute
+  updateUi()
+})
+
 function updateUi () {
   document.querySelector('#from').textContent = state.from
-  if (state.ollamas.find(m => m.name === state.model))
+  document.querySelector('#speed').textContent = state.speed
+  document.querySelector('#mute').textContent = state.mute
+  document.querySelector('#voice-select').value = state.voice
+
+  if (state.ollamas.find(m => m.name === state.model)) {
     document.querySelector('#model').value = state.model
+  }
 
   if (!state.model || state.computing !== state.model) {
     document.querySelector('body').classList.remove('computing')
@@ -158,6 +172,25 @@ function send (msg) {
   socket.send(JSON.stringify(msg))
 }
 
+document.querySelector('#voice-select').addEventListener('change', () => {
+  const voiceSelect = document.querySelector('#voice-select')
+  console.log(voiceSelect.selectedOptions[0].value)
+  state.voice = voiceSelect.selectedOptions[0].value
+
+  console.log(document.querySelector('#voice-select').value)
+  const testSpeech = new SpeechSynthesisUtterance(
+    `Hello there, this is my voice.`
+  )
+  testSpeech.voice = state.voices.find(voice => voice.name === state.voice)
+  testSpeech.rate = state.speed
+  window.speechSynthesis.speak(testSpeech)
+  saveState()
+})
+
+speechSynthesis.addEventListener('voiceschanged', () => {
+  populateVoiceList()
+})
+
 function tts (text) {
   document.querySelector('body').classList.add('tts')
   const textContainer = document.querySelector('#response')
@@ -165,8 +198,8 @@ function tts (text) {
 
   const words = text.split('')
   const utterance = new SpeechSynthesisUtterance(text)
-
   let prevChar = 0
+
   utterance.addEventListener('boundary', event => {
     const char = event.charIndex + event.charLength
     const word = words.slice(prevChar, char).join('')
@@ -182,7 +215,7 @@ function tts (text) {
 
   utterance.addEventListener('end', event => {
     document.querySelector('body').classList.remove('tts')
-     state.computing = null
+    state.computing = null
     updateUi()
 
     send({
@@ -191,17 +224,37 @@ function tts (text) {
     })
   })
 
-  const voices = speechSynthesis.getVoices()
-  utterance.voice = voices[0]
-  utterance.rate = 1
+  if (state.voice) {
+    utterance.voice = state.voices.find(voice => voice.name === state.voice)
+  }
+
+  utterance.rate = state.speed
+  if (state.mute) {
+    utterance.volume = 0
+  } else {
+    utterance.volume = 1
+  }
 
   window.speechSynthesis.speak(utterance)
+}
+
+function populateVoiceList () {
+  state.voices = speechSynthesis.getVoices()
+
+  state.voices.forEach((voice, i) => {
+    const option = document.createElement('option')
+    option.textContent = `${state.voices[i].name} (${state.voices[i].lang})`
+    option.value = state.voices[i].name
+
+    document.getElementById('voice-select').appendChild(option)
+  })
 }
 
 async function init () {
   loadState()
   await loadOllama()
   updateUi()
+  populateVoiceList()
 }
 
 init()

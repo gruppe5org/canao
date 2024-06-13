@@ -181,17 +181,64 @@ img {
   box-shadow: none;
 }
 
+#speech-controls {
+  grid-column: 5 / span 2;
+  grid-row: 9 / span 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  user-select: none;
+}
+
+#voice-select {
+  grid-column: 5 / span 2;
+  grid-row: 8 / span 1;
+}
+
+#speech-controls .sp {
+  cursor: pointer;
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  width: 6rem;
+  height: 4rem;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#speech-controls .sw {
+  cursor: pointer;
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  width: 12rem;
+  height: 4rem;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 
 .tts #visual {
   grid-column: 5 / span 2;
-  grid-row: 6 / span 4;
+  grid-row: 8 / span 2;
   z-index: 0;
   box-shadow: 0 0 10em var(--secondary-color);
 }
 
+.tts #voice-select{
+  display: none;
+}
+
+.tts #speech-controls{
+  display: none;
+}
+
 .interface #models {
   grid-column: 5 / span 2;
-  grid-row: 2 / span 4;
+  grid-row: 2 / span 6;
 }
 
 /* controller */
@@ -228,7 +275,7 @@ img {
 
 #models {
   grid-column: 5 / span 2;
-  grid-row: 3 / span 4;
+  grid-row: 3 / span 6;
 }
 
 #scroller {
