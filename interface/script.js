@@ -1,5 +1,5 @@
 let state = {
-  server: '10.1.105.107' /* '172.17.15.68' */,
+  server: '192.168.0.117' /* '172.17.15.68' */,
   from: null,
   model: null,
   computing: null,
