@@ -1,12 +1,13 @@
-# CLOUDS ARE NOT AN OPTION @ITERATION4.0
+# CLOUDS ARE NOT AN OPTION @HiddenLayersConference
 
 ![](setup.png)
 
-_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [ITERATION 4.0](https://coco.study/iteration) of [Code & Context](https://coco.study) on February 7th, 2025_
+_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [Hidden Layers Conference](https://hiddenlayers.de/) for AI and Design at [Köln International School of Design](https://kisd.de/en/) from June 12-15, 2024_
 
 <details>
   <summary>View Workshop Description</summary>
-The workshop CLOUDS ARE NOT AN OPTION will contextualise recent AI systems according to their scale and within their vast infrastructure in that current developments in large language models manifest two main characteristics: as big as possible -- and as open as necessary. The objective of this workshop is to examine approaches that utilise local computation to run these systems. Together we aim to provide a brief understanding of the internal mechanisms of large language models, their underlying structures, datasets and the implications of the corresponding user interfaces. The outcome of this workshop will be a collective performance, that will utilise chain reactions and feedback to create a closed loop, similar to a Rube Goldberg machine.
+The workshop CLOUDS ARE NOT AN OPTION will contextualise recent AI systems according to their scale and within their vast infrastructure in that current developments in large language models manifest two main characteristics: as big as possible -- and as open as necessary. In this workshop we will take a closer look at the implications of the corporate min-maxing of both features by questioning the apparent 'openness' and fixation on large scale parameter values of these systems. The current critical AI discourse and prevailing local-first approaches will guide us along the way and form an intersection that will serve as a necessary critical toolset to approach the responsible and sustainable integration of AI technologies in user applications.
+Together we aim to provide a basic understanding of the internal mechanisms of large language models, their underlying training structure, datasets and tools, while offering concrete practical insights into how to run small scale models, offline and locally using alternative open source approaches. The outcome of this workshop will be a collective screencast, which shares our gathered insights and yields an alternative way to practise the ambiguous technological stack.
 </details>
 
 ## Resources
@@ -30,13 +31,17 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 7. Iterate and refine: Based on the performance test, return to step 4 to further adjust and improve your model. Iterate until the time is up.  
 
 ### Timeline
-  
-13:00 – 13:30 30 min **Input**  
-13:30 – 14:00 30 min **Setup** (Step 1-2)  
-14:00 – 14:30 30 min **Group Work** (Step 3-5)  
 
-14:30 – 16:00 90 min **Collaborative Test & Group Work**, we start a collaborative test every few minutes (Step 6-7)  
-16:00 – 16:15 15 min **Performance**  
+14:00 – 14:15 15 min **Welcome**  
+14:15 – 14:45 30 min **Input**  
+14:45 – 15:15 30 min **Setup** (Step 1-2)  
+15:15 – 15:45 30 min **Group Work** (Step 3-5)  
+
+15:45 – 16:15 30 min **Collaborative Test** (Step 6)  
+16:15 – 17:15 60 min **Group Work**, we start a collaborative test every 15 min (Step 7)  
+17:15 – 17:30 15 min **Exhibition Setup / Performance Preperation**  
+
+18:15 – 19:00 45 min **Workshop Results**
 
 # Exhibition / Performance
 The outcome of this workshop is a collective performance, where every group has one computer, that represents one concept and runs a large language model locally. The computers are chained and respond to each other in order to create an endless chain of computer conversations.
@@ -47,35 +52,8 @@ The outcome of this workshop is a collective performance, where every group has 
 
 1. Download [Ollama](https://www.ollama.com/)
 2. Open Ollama
-3. Set enviroment variables [more infos can be found here](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server)
-
-      #### MacOS:
-      `launchctl setenv OLLAMA_HOST "0.0.0.0"`   
-      `launchctl setenv OLLAMA_ORIGINS "*"`
-
-      #### Windows:
-
-      Quit Ollama by clicking on it in the task bar.  
-      Start the Settings (Windows 11) or Control Panel (Windows 10) application and search for environment variables.  
-      Click on Edit environment variables for your account.  
-      Edit or create a new variable for your user account for `OLLAMA_HOST` with the value `0.0.0.0` and `OLLAMA_ORIGIN` with the value `*`  
-      Click OK/Apply to save.  
-
-      #### Linux: 
-      Edit the systemd service by calling `systemctl edit ollama.service`. This will open an editor.  
-      For each environment variable, add a line Environment under section:  
-
-      ```
-      [Service]   
-      launchctl setenv OLLAMA_HOST "0.0.0.0"  
-      launchctl setenv OLLAMA_ORIGINS "*"  
-      ```
-      Save and exit.  
-      Reload systemd and restart Ollama:  
-
-      `systemctl daemon-reload`  
-      `systemctl restart ollama`
-
+3. Set enviroment variable, `OLLAMA_HOST = 0.0.0.0` [read the docs for instructions on how to set enviroment variables on Windows/MacOS/Linux](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server)
+4. Also set the enviroment variable `OLLAMA_ORIGINS = "*"` The enviroment variables are required to enable our computers to communicate with each other. Step 3 and 4 are not required when you just want to use Ollama locally. But we need it for our custom interface to work
 5. Restart Ollama
 
 ### Base Models
@@ -94,7 +72,7 @@ You can create custom models that uses a Base Model as a reference. There are a 
 **Example Modelfile**
 ``` 
 # set the base model to use a reference
-FROM llama3.2
+FROM llama3
 
 # set the temperature to 1 [higher is more creative, lower is more coherent]
 PARAMETER temperature 1
