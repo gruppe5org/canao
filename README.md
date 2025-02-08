@@ -2,7 +2,7 @@
 
 ![](setup.png)
 
-_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [ITERATION 4.0](https://coco.study/iteration) of [Code & Context](https://coco.study) on February 7th, 2025_
+_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [ITERATION 4.0](https://coco.study/iteration) of [Code & Context](https://coco.study) on February 8th, 2025_
 
 <details>
   <summary>View Workshop Description</summary>
@@ -35,7 +35,7 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 13:30 – 14:00 30 min **Setup** (Step 1-2)  
 14:00 – 14:30 30 min **Group Work** (Step 3-5)  
 
-14:30 – 16:00 90 min **Collaborative Test & Group Work**, we start a collaborative test every few minutes (Step 6-7)  
+14:30 – 16:00 90 min **Collaborative Test & Group Work**, collaborative test every few minutes (Step 6-7)  
 16:00 – 16:15 15 min **Performance**  
 
 # Exhibition / Performance

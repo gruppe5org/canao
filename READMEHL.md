@@ -38,7 +38,7 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 15:15 – 15:45 30 min **Group Work** (Step 3-5)  
 
 15:45 – 16:15 30 min **Collaborative Test** (Step 6)  
-16:15 – 17:15 60 min **Group Work**, we start a collaborative test every 15 min (Step 7)  
+16:15 – 17:15 60 min **Group Work**, collaborative test every 15 min (Step 7)  
 17:15 – 17:30 15 min **Exhibition Setup / Performance Preperation**  
 
 18:15 – 19:00 45 min **Workshop Results**
