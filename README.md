@@ -2,7 +2,7 @@
 
 ![](setup.png)
 
-_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [ITERATION 4.0](https://coco.study/iteration) of [Code & Context](https://coco.study) on February 8th, 2025_
+_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [By Design and by Disaster Conference](https://coco.study/iteration) on May 9th, 2025_
 
 <details>
   <summary>View Workshop Description</summary>
@@ -26,17 +26,15 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 3. Conceptualize your model: Think about a concept, narrative, or persona for your model.  
 4. Adjust your custom model: Modify the custom model file to align with your chosen concept, narrative, or persona. Create your own visual and replace it with `visual.png` in the `interface` folder. 
 5. Test the model: Use the terminal interface to test your customized model.  
-6. Collaborative tests: Get together with other groups to test the collective performance using the custom interface. Define an order for the models. 
+6. Collaborative tests: Get together with other groups to test the collective performance using the interface. Define an order for the models. 
 7. Iterate and refine: Based on the performance test, return to step 4 to further adjust and improve your model. Iterate until the time is up.  
 
 ### Timeline
   
-13:00 – 13:30 30 min **Input**  
-13:30 – 14:00 30 min **Setup** (Step 1-2)  
-14:00 – 14:30 30 min **Group Work** (Step 3-5)  
-
-14:30 – 16:00 90 min **Collaborative Test & Group Work**, collaborative test every few minutes (Step 6-7)  
-16:00 – 16:15 15 min **Performance**  
+11:00 – 11:30 30 min **Input**  
+11:30 – 12:00 30 min **Setup** (Step 1-2)  
+12:00 – 12:30 30 min **Group Work** (Step 3-5)  
+12:30 – 13:00 30 min **Collaborative Test & Performance** (Step 6-7)  
 
 # Exhibition / Performance
 The outcome of this workshop is a collective performance, where every group has one computer, that represents one concept and runs a large language model locally. The computers are chained and respond to each other in order to create an endless chain of computer conversations.
