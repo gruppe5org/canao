@@ -16,6 +16,7 @@ The workshop CLOUDS ARE NOT AN OPTION will contextualise recent AI systems accor
 [Tweet: Sydney/Bing threatens to kill me (2023)](https://x.com/sethlazar/status/1626257535178280960)  
 [Article: OpenAI Used Kenyan Workers on Less Than $2 Per Hour to Make ChatGPT Less Toxic (2023)](https://time.com/6247678/openai-chatgpt-kenya-workers/)  
 [Talk: Deconstructing the Endless Engagement Aesthetics of AI Platforms (2024)](https://youtu.be/4AOYm72N0YE?si=_cIE0gC9ohUcoSom&t=311)  
+[Article: Using ChatGPT is not bad for the environment (2025)](https://andymasley.substack.com/p/individual-ai-use-is-not-bad-for)  
 
 ## Workshop Concept
 In the workshop we use a custom made interface to chain multiple LLMs that run locally on the participants computers. Each group of participants should decide on a base model and adjust a custom model file. The goal is that every group develops a concept of their model, that serves a certain purpose or represents a certain persona. The workshop will result in a collective performance, the output from one group's model serves as the input for the next group's model, similar to a [Rube Goldberg machine](https://en.wikipedia.org/wiki/Rube_Goldberg_machine). The workshop will alternate between group work and collaborative testing to adapt the models for the performance. 
