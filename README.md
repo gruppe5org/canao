@@ -2,7 +2,7 @@
 
 ![](setup.png)
 
-_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [By Design and by Disaster Conference](https://coco.study/iteration) on May 9th, 2025_
+_This repository documents the **CLOUDS ARE NOT AN OPTION** workhop at the [By Design and by Disaster Conference](https://coco.study/iteration](https://designdisaster.unibz.it/2025/#about) on May 9th, 2025_
 
 <details>
   <summary>View Workshop Description</summary>
