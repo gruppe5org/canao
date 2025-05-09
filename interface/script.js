@@ -1,5 +1,5 @@
 let state = {
-  server: '192.168.1.210' /* '172.17.15.68' */,
+  server: '192.168.0.120' /* '172.17.15.68' */,
   from: null,
   model: null,
   computing: null,
@@ -18,7 +18,7 @@ socket.addEventListener('open', () => {
   })
 })
 
-socket.addEventListener('message', message => {
+socket.addEventListener('message', (message) => {
   const msg = JSON.parse(message.data)
   console.log(msg)
   if (msg.type === 'init') {
@@ -47,12 +47,10 @@ document.querySelector('#send').addEventListener('click', () => {
     payload: state.model
   })
 
-  const ollama = state.ollamas.find(o => o.name === state.model)
+  const ollama = state.ollamas.find((o) => o.name === state.model)
   if (ollama.system) {
     document.querySelector('#system').innerHTML = ollama.system
-    document.querySelector('#system').style.animation = `marquee ${
-      ollama.system.length / 10
-    }s linear infinite`
+    document.querySelector('#system').style.animation = `marquee ${ollama.system.length / 10}s linear infinite`
   } else {
     document.querySelector('#system').innerHTML = ''
     document.querySelector('#system').style.animation = ''
@@ -60,23 +58,23 @@ document.querySelector('#send').addEventListener('click', () => {
   saveState()
 })
 
-document.querySelector('#speed').addEventListener('click', e => {
+document.querySelector('#speed').addEventListener('click', (e) => {
   state.speed = (Math.round((state.speed + 0.1) * 10) / 10) % 3
   updateUi()
 })
 
-document.querySelector('#mute').addEventListener('click', e => {
+document.querySelector('#mute').addEventListener('click', (e) => {
   state.mute = !state.mute
   updateUi()
 })
 
-function updateUi () {
+function updateUi() {
   document.querySelector('#from').textContent = state.from
   document.querySelector('#speed').textContent = state.speed
   document.querySelector('#mute').textContent = state.mute
   document.querySelector('#voice-select').value = state.voice
 
-  if (state.ollamas.find(m => m.name === state.model)) {
+  if (state.ollamas.find((m) => m.name === state.model)) {
     document.querySelector('#model').value = state.model
   }
 
@@ -89,7 +87,7 @@ function updateUi () {
   const ul = document.querySelector('#models')
   ul.innerHTML = ''
 
-  state.models.forEach(m => {
+  state.models.forEach((m) => {
     const li = document.createElement('li')
     li.id = m.model
     li.classList = 'model'
@@ -106,7 +104,7 @@ function updateUi () {
     select.appendChild(op)
     document.querySelector('body').classList.add('no-models')
   } else {
-    state.ollamas?.forEach(m => {
+    state.ollamas?.forEach((m) => {
       const op = document.createElement('option')
       op.value = m.name
       op.innerHTML = m.name
@@ -123,15 +121,15 @@ function updateUi () {
   }
 }
 
-async function loadOllama () {
+async function loadOllama() {
   const url = 'http://localhost:11434/api'
 
   try {
     const r = await fetch(`${url}/tags`)
     const tags = await r.json()
-    const models = tags.models.map(t => t.name.replace(':latest', ''))
+    const models = tags.models.map((t) => t.name.replace(':latest', ''))
     state.ollamas = await Promise.all(
-      models.map(async m => {
+      models.map(async (m) => {
         const response = await fetch(`${url}/show`, {
           method: 'POST',
           body: JSON.stringify({
@@ -151,13 +149,13 @@ async function loadOllama () {
   }
 }
 
-function loadState () {
+function loadState() {
   if (localStorage.getItem('state')) {
     state = JSON.parse(localStorage.getItem('state'))
   }
 }
 
-function saveState () {
+function saveState() {
   localStorage.setItem(
     'state',
     JSON.stringify({
@@ -168,7 +166,7 @@ function saveState () {
   )
 }
 
-function send (msg) {
+function send(msg) {
   socket.send(JSON.stringify(msg))
 }
 
@@ -178,10 +176,8 @@ document.querySelector('#voice-select').addEventListener('change', () => {
   state.voice = voiceSelect.selectedOptions[0].value
 
   console.log(document.querySelector('#voice-select').value)
-  const testSpeech = new SpeechSynthesisUtterance(
-    `Hello there, this is my voice.`
-  )
-  testSpeech.voice = state.voices.find(voice => voice.name === state.voice)
+  const testSpeech = new SpeechSynthesisUtterance(`Hello there, this is my voice.`)
+  testSpeech.voice = state.voices.find((voice) => voice.name === state.voice)
   testSpeech.rate = state.speed
   window.speechSynthesis.speak(testSpeech)
   saveState()
@@ -191,7 +187,7 @@ speechSynthesis.addEventListener('voiceschanged', () => {
   populateVoiceList()
 })
 
-function tts (text) {
+function tts(text) {
   document.querySelector('body').classList.add('tts')
   const textContainer = document.querySelector('#response')
   textContainer.innerHTML = ''
@@ -200,7 +196,7 @@ function tts (text) {
   const utterance = new SpeechSynthesisUtterance(text)
   let prevChar = 0
 
-  utterance.addEventListener('boundary', event => {
+  utterance.addEventListener('boundary', (event) => {
     const char = event.charIndex + event.charLength
     const word = words.slice(prevChar, char).join('')
     prevChar = char
@@ -213,7 +209,7 @@ function tts (text) {
     textContainer.scrollTop = textContainer.scrollHeight
   })
 
-  utterance.addEventListener('end', event => {
+  utterance.addEventListener('end', (event) => {
     document.querySelector('body').classList.remove('tts')
     state.computing = null
     updateUi()
@@ -225,7 +221,7 @@ function tts (text) {
   })
 
   if (state.voice) {
-    utterance.voice = state.voices.find(voice => voice.name === state.voice)
+    utterance.voice = state.voices.find((voice) => voice.name === state.voice)
   }
 
   utterance.rate = state.speed
@@ -238,7 +234,7 @@ function tts (text) {
   window.speechSynthesis.speak(utterance)
 }
 
-function populateVoiceList () {
+function populateVoiceList() {
   state.voices = speechSynthesis.getVoices()
 
   state.voices.forEach((voice, i) => {
@@ -250,7 +246,7 @@ function populateVoiceList () {
   })
 }
 
-async function init () {
+async function init() {
   loadState()
   await loadOllama()
   updateUi()

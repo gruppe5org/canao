@@ -1,5 +1,5 @@
 let state = {
-  server: '192.168.1.210' /* '172.17.15.68' */,
+  server: '192.168.0.120' /* '172.17.15.68' */,
   from: null,
   model: null,
   computing: null,
@@ -27,7 +27,7 @@ document.querySelector('#loop').addEventListener('click', () => {
   updateUi()
 })
 
-document.querySelector('#prompt').addEventListener('keydown', event => {
+document.querySelector('#prompt').addEventListener('keydown', (event) => {
   if (event.key == 'Enter') {
     event.preventDefault()
     compute()
@@ -40,7 +40,7 @@ socket.addEventListener('open', () => {
   })
 })
 
-socket.addEventListener('message', message => {
+socket.addEventListener('message', (message) => {
   const msg = JSON.parse(message.data)
   console.log(msg)
 
@@ -71,7 +71,7 @@ socket.addEventListener('message', message => {
   updateUi()
 })
 
-function compute () {
+function compute() {
   const prompt = document.querySelector('#prompt').value
   if (!prompt) {
     return console.log('no initial prompt')
@@ -83,7 +83,7 @@ function compute () {
   }
 }
 
-function updateUi () {
+function updateUi() {
   if (!state.computing) {
     document.querySelector('body').classList.remove('computing')
     document.querySelector('#compute').textContent = 'compute'
@@ -94,14 +94,12 @@ function updateUi () {
 
   document.querySelector('#from').textContent = state.from
   document.querySelector('#clients').textContent = state.models.length
-  document.querySelector('#loop').textContent = `loop (${
-    state.loop ? 'on' : 'off'
-  })`
+  document.querySelector('#loop').textContent = `loop (${state.loop ? 'on' : 'off'})`
 
   const list = document.querySelector('#models')
   list.innerHTML = ''
 
-  state.models.forEach(m => {
+  state.models.forEach((m) => {
     const li = document.createElement('li')
     li.id = m.model
     li.classList = 'model'
@@ -131,9 +129,7 @@ function updateUi () {
         this.innerHTML = model
         this.id = model
 
-        const models = [...document.querySelectorAll('.model')].map(
-          m => m.innerHTML
-        )
+        const models = [...document.querySelectorAll('.model')].map((m) => m.innerHTML)
         send({
           type: 'order',
           payload: models
@@ -150,6 +146,6 @@ function updateUi () {
   }
 }
 
-function send (msg) {
+function send(msg) {
   socket.send(JSON.stringify(msg))
 }
