@@ -34,10 +34,10 @@ In the workshop we use a custom made interface to chain multiple LLMs that run l
 
 ### Timeline
   
-11:00 – 11:30 30 min **Input**  
+11:00 – 11:30 30 min **Introductions + Input**  
 11:30 – 12:00 30 min **Setup** (Step 1-2)  
 12:00 – 12:30 30 min **Group Work** (Step 3-5)  
-12:30 – 13:00 30 min **Collaborative Test & Performance** (Step 6-7)  
+12:30 – 13:00 30 min **Collaborative Test + Performance** (Step 6-7)  
 
 # Exhibition / Performance
 The outcome of this workshop is a collective performance, where every group has one computer, that represents one concept and runs a large language model locally. The computers are chained and respond to each other in order to create an endless chain of computer conversations.
